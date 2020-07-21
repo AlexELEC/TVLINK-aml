@@ -18,7 +18,7 @@
     <h4 id="version"><b>TVLINK version: {{version}}</b></h4>
     <p>&nbsp;</p>
     Copyright © 2020 all rights reserved to Alex@ELEC
-    <p><a href="http://alexelec.tv">alexelec.tv</a></p>
+    <p><a href="https://alexelec.tv">alexelec.tv</a></p>
     <img src="/styles/logo.png" style="border:0" >
     <p>&nbsp;</p>
     The program does not broadcast anything.

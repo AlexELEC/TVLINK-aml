@@ -11,6 +11,7 @@
           <input id="logo_chURL" class="form-control" type="text" value="" onClick="this.select();">
         </div>
         <div class="modal-footer"> 
+          <button type="button" class="btn btn-warning" onClick="server.choice_local_logo()" >Local logos</button>
           <button type="button" class="btn btn-primary" onClick="server.save_logo_url()" >Save changes</button>
           <button type="button" class="btn btn-secondary" onClick="modalClose('mdLogo')" >Close</button>
         </div>

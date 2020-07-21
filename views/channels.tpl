@@ -12,6 +12,7 @@
   % include('join-channels.tpl')
   % include('split-channels.tpl')
   % include('info-channels.tpl')
+  % include('local-logos.tpl')
 
   <table class="table" width="100%" border="2" >
 
