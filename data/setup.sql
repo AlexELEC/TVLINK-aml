@@ -50,6 +50,7 @@ INSERT INTO settings (name, value) VALUES ('hls_segment_threads', NULL);
 INSERT INTO settings (name, value) VALUES ('hls_playlist_reload_time', NULL);
 INSERT INTO settings (name, value) VALUES ('hls_stream_data', NULL);
 INSERT INTO settings (name, value) VALUES ('lic_key', NULL);
+INSERT INTO settings (name, value) VALUES ('src_proxy', NULL);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

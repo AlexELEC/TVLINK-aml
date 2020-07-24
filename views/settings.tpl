@@ -232,6 +232,13 @@
   <p>&nbsp;</p>
 
   <form class="form-inline">
+    <label class="form-control"><b>Sources Proxy:</b></label>
+    <input id="src_proxy" size="47%" class="form-control" type="text" value="{{proxy_url}}" onchange="server.set_proxy()"></input>
+  </form>
+
+  <p>&nbsp;</p>
+
+  <form class="form-inline">
     <label class="form-control"><b>License key:</b></label>
     <input id="lic_key" size="50%" class="form-control" type="password" value="{{lic_key}}"></input>
     <button id="btn_ae_auth" type="button" onClick="server.set_lickey()">OK</button>

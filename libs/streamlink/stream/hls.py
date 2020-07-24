@@ -132,6 +132,7 @@ class HLSStreamWriter(SegmentedStreamWriter):
                                          **request_params)
         except StreamError as err:
             log.error("Failed to open segment {0}: {1}", sequence.num, err)
+            self.close()
             return
 
     def write(self, sequence, res, chunk_size=8192):
