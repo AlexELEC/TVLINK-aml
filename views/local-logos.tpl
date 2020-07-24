@@ -14,6 +14,8 @@
           <p id="ilg_body"></p>
         </div>
         <div class="modal-footer"> 
+          <button id="ilg_prev" type="button" class="btn btn-primary" onClick="" >Prev</button>
+          <button id="ilg_next" type="button" class="btn btn-primary" onClick="" >Next</button>
           <button type="button" class="btn btn-secondary" onClick="modalClose('mdIntLogo')" >Close</button>
         </div>
       </div>
