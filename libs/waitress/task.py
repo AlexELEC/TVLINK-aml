@@ -110,10 +110,12 @@ class ThreadedTaskDispatcher(object):
             self.queue_cv.notify()
             queue_size = len(self.queue)
             idle_threads = len(self.threads) - self.stop_count - self.active_count
+            '''
             if queue_size > idle_threads:
                 self.queue_logger.warning(
                     "Task queue depth is %d", queue_size - idle_threads
                 )
+            '''
 
     def shutdown(self, cancel_pending=True, timeout=5):
         self.set_thread_count(0)
