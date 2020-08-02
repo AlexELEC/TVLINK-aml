@@ -301,6 +301,7 @@ class HLSStreamWorker(SegmentedStreamWorker):
         return default
 
     def iter_segments(self):
+        itr_count = 0
         total_duration = 0
         while not self.closed:
             for sequence in filter(self.valid_sequence, self.playlist_sequences):
@@ -322,7 +323,11 @@ class HLSStreamWorker(SegmentedStreamWorker):
                 try:
                     self.reload_playlist()
                 except StreamError as err:
+                    itr_count += 1
                     log.warning("Failed to reload playlist: {0}", err)
+                if itr_count > 2:
+                    log.warning("Failed to reload playlist count: {0}", itr_count)
+                    return
 
 
 class HLSStreamReader(SegmentedStreamReader):

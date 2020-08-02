@@ -151,7 +151,7 @@ class SegmentedStreamWriter(Thread):
                 segment, future = self.futures.get(block=True, timeout=0.5)
                 try:
                     #print ('segment:', segment.segment.uri)
-                    if 'vod/ban' in segment.segment.uri or 'video/money' in segment.segment.uri or 'errors/banned' in segment.segment.uri or 'vod/allow_all_n' in segment.segment.uri:
+                    if 'vod/ban' in segment.segment.uri or 'video/money' in segment.segment.uri or 'errors/banned' in segment.segment.uri or 'vod/allow_all_n' in segment.segment.uri or '/404/' in segment.segment.uri:
                         log.error("BANNED: provider blocked stream...")
                         print ('BANNED: provider blocked stream => ', segment.segment.uri)
                         break
