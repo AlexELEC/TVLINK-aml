@@ -98,6 +98,15 @@ class SegmentedStreamWriter(Thread):
         Thread.__init__(self, name="Thread-{0}".format(self.__class__.__name__))
         self.daemon = True
 
+        self.BAN_LIST = (
+                        'vod/ban',
+                        'video/money',
+                        'errors/banned',
+                        'vod/allow_all_n',
+                        '/404/',
+                        '/405/',
+                        )
+
     def close(self):
         """Shuts down the thread."""
         if not self.closed:
@@ -146,15 +155,19 @@ class SegmentedStreamWriter(Thread):
         pass
 
     def run(self):
+        b_Baned = False
         while not self.closed:
             try:
                 segment, future = self.futures.get(block=True, timeout=0.5)
                 try:
                     #print ('segment:', segment.segment.uri)
-                    if 'vod/ban' in segment.segment.uri or 'video/money' in segment.segment.uri or 'errors/banned' in segment.segment.uri or 'vod/allow_all_n' in segment.segment.uri or '/404/' in segment.segment.uri:
-                        log.error("BANNED: provider blocked stream...")
-                        print ('BANNED: provider blocked stream => ', segment.segment.uri)
-                        break
+                    for ban in self.BAN_LIST:
+                        if ban in segment.segment.uri:
+                            log.error("BANNED: provider blocked stream [{}]".format(segment.segment.uri) )
+                            print ('BANNED: provider blocked stream => ', segment.segment.uri)
+                            b_Baned = True
+                            break
+                    if b_Baned: break
                 except: pass
             except queue.Empty:
                 continue
