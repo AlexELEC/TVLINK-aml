@@ -100,6 +100,7 @@ class SegmentedStreamWriter(Thread):
 
         self.BAN_LIST = (
                         'vod/ban',
+                        'vod/deny',
                         'video/money',
                         'errors/banned',
                         'vod/allow_all_n',
