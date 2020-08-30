@@ -3,12 +3,7 @@
 # SPDX-License-Identifier: GPL-2.0
 # Copyright (C) 2011-present Alex@ELEC (http://alexelec.in.ua)
 
-CH_NAME="$@"
-WRK_DIR=`dirname $0`
-CH_FILE="$WRK_DIR/tvh-channels.list"
-
-FIND_CH_NAME=`echo "$CH_NAME" | sed 's|\[|\\\[|g; s|\]|\\\]|g'`
-URL=`grep -m 1 "^$FIND_CH_NAME #" $CH_FILE | awk -F\\# '{print $2}' | sed 's/^[ \t]*//; s/[ \t]*$//'`
+URL="$@"
 
 echo "*** IPTV stream TVLINK: $URL ***" >&2
-/usr/bin/cvlc --quiet --ipv4-timeout=60000 --network-caching=0 --no-drop-late-frames --no-skip-frames "$URL" --sout-mux-caching=0 --sout '#std{mux=ts,access=file,dst=-}'
+/usr/bin/cvlc --quiet --ipv4-timeout=5000 --network-caching=0 --no-drop-late-frames --no-skip-frames "$URL" --sout-mux-caching=0 --sout '#std{mux=ts,access=file,dst=-}'

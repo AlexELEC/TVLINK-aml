@@ -323,8 +323,9 @@ class HLSStreamWorker(SegmentedStreamWorker):
                 try:
                     self.reload_playlist()
                 except StreamError as err:
-                    itr_count += 1
                     log.warning("Failed to reload playlist: {0}", err)
+                    if "403 Client Error" in str(err): return
+                    itr_count += 1
                 if itr_count > 2:
                     log.warning("Failed to reload playlist count: {0}", itr_count)
                     return
