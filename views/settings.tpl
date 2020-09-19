@@ -110,6 +110,12 @@
   </form>
   <p>&nbsp;</p>
 
+  <form class="form-inline" >
+    <label class="form-control"><b>Zabava User-Agent:</b></label>
+    <input id="zbv_agent" size="50%" class="form-control" value="{{zbv_agent}}" onchange="server.set_zbv_agent()">
+  </form>
+  <p>&nbsp;</p>
+
   <div style="overflow:hidden;_zoom:1">
 
     <table class="table" border="2" style="float:left;width:49%;display:block" >
