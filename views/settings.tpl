@@ -121,6 +121,7 @@
     <table class="table" border="2" style="float:left;width:49%;display:block" >
 
       {{!tbl_head}}
+      % buf_values = [3,5,8,10,15,20,25,30,35,40,45,50]
 
       <!-- TS Buffer -->
       <tr>
@@ -129,7 +130,7 @@
         </td>
         <td>
           <select id="ts_buffer" class="form-control" onchange="server.setting_options('ts_buffer')" >
-            % for tbuf in range(1,21):
+            % for tbuf in buf_values:
             <option {{'selected' if tbuf == int(ts_buffer) else ""}} >{{tbuf}}</option>
             % end
           </select>
@@ -142,7 +143,7 @@
         </td>
         <td>
           <select id="hls_buffer" class="form-control" onchange="server.setting_options('hls_buffer')" >
-            % for hbuf in range(1,21):
+            % for hbuf in buf_values:
             <option {{'selected' if hbuf == int(hls_buffer) else ""}} >{{hbuf}}</option>
             % end
           </select>
