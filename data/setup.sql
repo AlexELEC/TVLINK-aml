@@ -21,6 +21,8 @@ INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, upd
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('TvFresh', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('StandartTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('VseTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
+INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Peers', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
+INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Voka', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('AdultTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('HochuTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 
@@ -41,6 +43,7 @@ INSERT INTO settings (name, value) VALUES ('upd_ch_start', NULL);
 INSERT INTO settings (name, value) VALUES ('upd_ch_list', NULL);
 INSERT INTO settings (name, value) VALUES ('del_ch', NULL);
 INSERT INTO settings (name, value) VALUES ('usr_agent', NULL);
+INSERT INTO settings (name, value) VALUES ('zbv_agent', NULL);
 INSERT INTO settings (name, value) VALUES ('ts_buffer', NULL);
 INSERT INTO settings (name, value) VALUES ('hls_buffer', NULL);
 INSERT INTO settings (name, value) VALUES ('http_timeout', NULL);
