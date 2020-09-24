@@ -23,6 +23,7 @@ INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, upd
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('VseTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Peers', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Voka', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
+INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Strah', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('AdultTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('HochuTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 
