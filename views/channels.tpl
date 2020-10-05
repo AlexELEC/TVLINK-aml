@@ -18,6 +18,7 @@
 
     <tr>
       <th width="2%" >Logo</th>
+      <th width="1%" ><a href="#" onClick="sortTo('number')">Num</a></th>
       <th width="10%" ><a href="#" onClick="sortTo('names')">Name</a></th>
       <th width="10%" ><a href="#" onClick="sortTo('groups')">Group</a></th>
       <th width="2%" ><a href="#" onClick="uncheckSpl()">Clean</a></th> 
@@ -25,7 +26,7 @@
       <th width="3%" >ID</th>
     </tr>
 
-    <!-- channels database [ 0-chID, 1-chTitle, 2-chGroup, 3-chLogo, 4-chBinds, 5-chSplit, 6-chExist ] -->
+    <!-- channels database [ 0-chID, 1-chTitle, 2-chGroup, 3-chLogo, 4-chBinds, 5-chSplit, 6-chExist, 7-chNum ] -->
     % for row in dtbChannels:
     % rowID = 'row_' + row[0]
     <tr id="{{rowID}}" >
@@ -42,6 +43,21 @@
         <button class="btn" style="border:0" onClick="server.show_modal_logo('{{ids}}')" >
           <img id="{{ids}}" src="{{logo_url}}" style="width:60%" >
         </button>
+      </td>
+      <!-- Number -->
+      <%
+        ids = 'num_' + row[0]
+        try:
+            num = row[7]
+        except:
+            num = ""
+        end
+        if not num:
+            num = ""
+        end
+      %>
+      <td>
+        <input id="{{ids}}" class="form-control" type="text" value="{{num}}" onchange="server.set_ch_number('{{ids}}')" >
       </td>
       <!-- Title -->
       % ids = 'cht_' + row[0]
