@@ -84,7 +84,9 @@ class Streamlink(object):
             "ffmpeg-video-transcode": "copy",
             "ffmpeg-audio-transcode": "copy",
             "locale": None,
-            "user-input-requester": None
+            "user-input-requester": None,
+            "chunk-size-ts": 8192,
+            "chunk-size-hls": 8192
         })
         if options:
             self.options.update(options)

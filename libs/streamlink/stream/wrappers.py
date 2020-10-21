@@ -51,12 +51,13 @@ class StreamIOThreadWrapper(io.IOBase):
     """
 
     class Filler(Thread):
-        def __init__(self, fd, buffer):
+        def __init__(self, fd, buffer, chunk_size):
             Thread.__init__(self)
 
             self.error = None
             self.fd = fd
             self.buffer = buffer
+            self.chunk_size = chunk_size
             self.daemon = True
             self.running = False
 
@@ -65,7 +66,7 @@ class StreamIOThreadWrapper(io.IOBase):
 
             while self.running:
                 try:
-                    data = self.fd.read(8192)
+                    data = self.fd.read(self.chunk_size)
                 except IOError as error:
                     self.error = error
                     break
@@ -87,12 +88,13 @@ class StreamIOThreadWrapper(io.IOBase):
                 except Exception:
                     pass
 
-    def __init__(self, session, fd, timeout=30):
+    def __init__(self, session, fd, timeout=30, chunk_size=8192):
         self.buffer = RingBuffer(session.get_option("ringbuffer-size"))
         self.fd = fd
         self.timeout = timeout
+        self.chunk_size = chunk_size
 
-        self.filler = StreamIOThreadWrapper.Filler(self.fd, self.buffer)
+        self.filler = StreamIOThreadWrapper.Filler(self.fd, self.buffer, self.chunk_size)
         self.filler.start()
 
     def read(self, size=-1):

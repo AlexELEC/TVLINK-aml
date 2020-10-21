@@ -67,7 +67,9 @@ class HTTPStream(Stream):
     def open(self):
         method = self.args.get("method", "GET")
         timeout = self.session.http.timeout
+        chunk_size = self.session.get_option("chunk-size-ts")
         #print ('timeout:', timeout)
+        #print ('chunk-size-ts:', chunk_size)
         res = self.session.http.request(method=method,
                                         stream=True,
                                         exception=StreamError,
@@ -75,9 +77,9 @@ class HTTPStream(Stream):
                                         **self.args)
 
         #print ('res:', res)
-        fd = StreamIOIterWrapper(res.iter_content(8192))
+        fd = StreamIOIterWrapper(res.iter_content(chunk_size))
         if self.buffered:
-            fd = StreamIOThreadWrapper(self.session, fd, timeout=timeout)
+            fd = StreamIOThreadWrapper(self.session, fd, timeout=timeout, chunk_size=chunk_size)
 
         self.fdclose = fd
 

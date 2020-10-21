@@ -122,6 +122,7 @@
 
       {{!tbl_head}}
       % buf_values = [3,5,8,10,15,20,25,30,35,40,45,50]
+      % chunk_values = [4096, 8192, 16384, 24576, 32768]
 
       <!-- TS Buffer -->
       <tr>
@@ -149,6 +150,32 @@
           </select>
         </td>
       </tr>
+      <!-- TS chunk size -->
+      <tr>
+        <td >
+          <label class="form-control">TS chunk size</label>
+        </td>
+        <td>
+          <select id="chunk_size_ts" class="form-control" onchange="server.setting_options('chunk_size_ts')" >
+            % for tchunk in chunk_values:
+            <option {{'selected' if tchunk == int(chunk_size_ts) else ""}} >{{tchunk}}</option>
+            % end
+          </select>
+        </td>
+      </tr>
+      <!-- HLS chunk size -->
+      <tr>
+        <td >
+          <label class="form-control">HLS chunk size</label>
+        </td>
+        <td>
+          <select id="chunk_size_hls" class="form-control" onchange="server.setting_options('chunk_size_hls')" >
+            % for tchunk in chunk_values:
+            <option {{'selected' if tchunk == int(chunk_size_hls) else ""}} >{{tchunk}}</option>
+            % end
+          </select>
+        </td>
+      </tr>
       <!-- HTTP Timeout -->
       <tr>
         <td>
@@ -162,6 +189,13 @@
           </select>
         </td>
       </tr>
+
+    </table>
+
+    <table class="table" border="2" style="float:right;width:49%;display:block" >
+
+      {{!tbl_head}}
+
       <!-- HLS Segment Timeout -->
       <tr>
         <td>
@@ -175,13 +209,6 @@
           </select>
         </td>
       </tr>
-
-    </table>
-
-    <table class="table" border="2" style="float:right;width:49%;display:block" >
-
-      {{!tbl_head}}
-
       <!-- HLS Live Edge -->
       <tr>
         <td>
