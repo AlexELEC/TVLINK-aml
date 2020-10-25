@@ -1,17 +1,13 @@
-from __future__ import unicode_literals
-
-import argparse
 import logging
 import re
+from urllib.parse import parse_qsl, urlparse, urlunparse
 
-from streamlink.compat import is_py2, parse_qsl, urlparse, urlunparse
-from streamlink.plugin import Plugin, PluginError, PluginArguments, PluginArgument
+from streamlink.plugin import Plugin, PluginError
 from streamlink.plugin.api import validate, useragents
 from streamlink.plugin.api.utils import itertags, parse_query
 from streamlink.stream import HTTPStream, HLSStream
 from streamlink.stream.ffmpegmux import MuxedStream
 from streamlink.utils import parse_json, search_dict
-from streamlink.utils.encoding import maybe_decode
 
 log = logging.getLogger(__name__)
 
@@ -50,13 +46,11 @@ _config_schema = validate.Schema(
                 validate.optional("videoDetails"): {
                     validate.optional("isLive"): validate.transform(bool),
                     validate.optional("author"): validate.text,
-                    validate.optional("title"): validate.all(validate.text,
-                                                             validate.transform(maybe_decode))
+                    validate.optional("title"): validate.text
                 },
                 validate.optional("playabilityStatus"): {
                     validate.optional("status"): validate.text,
-                    validate.optional("reason"): validate.all(validate.text,
-                                                              validate.transform(maybe_decode)),
+                  validate.optional("reason"): validate.text
                 },
             },
         ),
@@ -98,10 +92,8 @@ class YouTube(Plugin):
 
     _oembed_schema = validate.Schema(
         {
-            "author_name": validate.all(validate.text,
-                                        validate.transform(maybe_decode)),
-            "title": validate.all(validate.text,
-                                  validate.transform(maybe_decode))
+            "author_name": validate.text,
+            "title": validate.text
         }
     )
 
@@ -129,14 +121,6 @@ class YouTube(Plugin):
         256: 256,
         258: 258,
     }
-
-    arguments = PluginArguments(
-        PluginArgument(
-            "api-key",
-            sensitive=True,
-            help=argparse.SUPPRESS  # no longer used
-        )
-    )
 
     def __init__(self, url):
         super(YouTube, self).__init__(url)
@@ -255,6 +239,10 @@ class YouTube(Plugin):
                     log.debug("Video ID from currentVideoEndpoint")
                     return video_id
             for x in search_dict(data, 'videoRenderer'):
+                if x.get("viewCountText", {}).get("runs"):
+                    if x.get("videoId"):
+                        log.debug("Video ID from videoRenderer (live)")
+                        return x["videoId"]
                 for bstyle in search_dict(x.get("badges", {}), "style"):
                     if bstyle == "BADGE_STYLE_TYPE_LIVE_NOW":
                         if x.get("videoId"):
@@ -266,8 +254,12 @@ class YouTube(Plugin):
                 if link.attributes.get("rel") == "canonical":
                     canon_link = link.attributes.get("href")
                     if canon_link != url:
-                        log.debug("Re-directing to canonical URL: {0}".format(canon_link))
-                        return self._find_video_id(canon_link)
+                        if canon_link.endswith("v=live_stream"):
+                            log.debug("The video is not available")
+                            break
+                        else:
+                            log.debug("Re-directing to canonical URL: {0}".format(canon_link))
+                            return self._find_video_id(canon_link)
 
         raise PluginError("Could not find a video on this page")
 
@@ -287,7 +279,7 @@ class YouTube(Plugin):
             params.update(_params)
 
             res = self.session.http.get(self._video_info_url, params=params)
-            info_parsed = parse_query(res.content if is_py2 else res.text, name="config", schema=_config_schema)
+            info_parsed = parse_query(res.text, name="config", schema=_config_schema)
             player_response = info_parsed.get("player_response", {})
             playability_status = player_response.get("playabilityStatus", {})
             if (playability_status.get("status") != "OK"):
@@ -307,7 +299,7 @@ class YouTube(Plugin):
         is_live = False
 
         self.video_id = self._find_video_id(self.url)
-        log.debug("Using video ID: {0}", self.video_id)
+        log.debug(f"Using video ID: {self.video_id}")
 
         info = self._get_stream_info(self.video_id)
         if info and info.get("status") == "fail":
@@ -348,7 +340,7 @@ class YouTube(Plugin):
                 )
                 streams.update(hls_streams)
             except IOError as err:
-                log.warning("Failed to extract HLS streams: {0}", err)
+                log.warning(f"Failed to extract HLS streams: {err}")
 
         if not streams and protected:
             raise PluginError("This plugin does not support protected videos, "

@@ -1,14 +1,14 @@
 import logging
-import re
-
-import subprocess
 from operator import itemgetter
+import re
+from shutil import which
+import subprocess
 
 from streamlink import logger
 from streamlink.stream.streamprocess import StreamProcess
-from streamlink.compat import str, which
 from streamlink.exceptions import StreamError
 from streamlink.utils import rtmpparse, escape_librtmp
+
 
 log = logging.getLogger(__name__)
 
@@ -97,7 +97,7 @@ class RTMPStream(StreamProcess):
             redirect = m.group(1)
 
         if redirect:
-            log.debug("Found redirect tcUrl: {0}", redirect)
+            log.debug(f"Found redirect tcUrl: {redirect}")
 
             if "rtmp" in self.parameters:
                 tcurl, playpath = rtmpparse(self.parameters["rtmp"])

@@ -17,14 +17,16 @@
   <div style="width:50%;margin: 0 auto;text-align:center;">
     <h4 id="version"><b>TVLINK version: {{version}}</b></h4>
     <p>&nbsp;</p>
-    Copyright © 2020 all rights reserved to Alex@ELEC
-    <p><a href="https://alexelec.tv">alexelec.tv</a></p>
-    <img src="/styles/logo.png" style="border:0" >
+    % if is_upd:
+      <em>Version <b>{{git_ver}}</b> is available. <a href="/update">Update program...</a></em>
+      <p>&nbsp;</p>
+    % end
+    <p><a href="https://alexelec.tv"><img src="/styles/logo.png" style="border:0" ></a></p>
     <p>&nbsp;</p>
     The program does not broadcast anything.
     TVLINK only caches the streams specified by the user or found in the open Internet access.
     <p>&nbsp;</p>
-    License: {{lictype}}
+    <b>License: {{lictype}}</b>
     <p>&nbsp;</p>
 
 
@@ -47,6 +49,7 @@
       </tr>
     </table>
     <p>&nbsp;</p>
+    Copyright © 2020 all rights reserved to <a href="https://alexelec.tv">Alex@ELEC</a>
   </div>
 
 </body>

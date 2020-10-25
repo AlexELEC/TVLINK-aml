@@ -1,14 +1,14 @@
 import base64
-import io
 import hashlib
 import hmac
+import io
 import random
+from urllib.parse import urlparse
 
 from .stream import Stream
 from .wrappers import StreamIOThreadWrapper, StreamIOIterWrapper
 
 from ..buffers import Buffer
-from ..compat import str, bytes, urlparse
 from ..exceptions import StreamError
 from ..utils import swfdecompress
 
@@ -101,7 +101,7 @@ class AkamaiHDStreamIO(io.IOBase):
         url = self.StreamURLFormat.format(host=self.host, streamname=self.streamname)
         params = self._create_params(seek=self.seek)
 
-        log.debug("Opening host={} streamname={}", self.host, self.streamname)
+        log.debug(f"Opening host={self.host} streamname={self.streamname}")
 
         try:
             res = self.session.http.get(url, stream=True, params=params)
@@ -201,7 +201,7 @@ class AkamaiHDStreamIO(io.IOBase):
             if isinstance(val, str):
                 val = val[:50]
 
-            log.debug(" {}={}", key, val)
+            log.debug(f" {key}={val}")
 
         updateattr("islive", "isLive")
         updateattr("sessionid", "session")
