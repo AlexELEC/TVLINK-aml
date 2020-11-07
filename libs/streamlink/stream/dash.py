@@ -7,12 +7,12 @@ from urllib.parse import urlparse, urlunparse
 
 import requests
 
-from streamlink import StreamError, PluginError
-from streamlink.stream.http import valid_args, normalize_key
-from streamlink.stream.stream import Stream
-from streamlink.stream.dash_manifest import MPD, sleeper, sleep_until, utc, freeze_timeline
+from streamlink import PluginError, StreamError
+from streamlink.stream.dash_manifest import MPD, freeze_timeline, sleep_until, sleeper, utc
 from streamlink.stream.ffmpegmux import FFMPEGMuxer
+from streamlink.stream.http import normalize_key, valid_args
 from streamlink.stream.segmented import SegmentedStreamReader, SegmentedStreamWorker, SegmentedStreamWriter
+from streamlink.stream.stream import Stream
 from streamlink.utils import parse_xml
 from streamlink.utils.l10n import Language
 
@@ -151,7 +151,7 @@ class DASHStream(Stream):
                  audio_representation=None,
                  period=0,
                  **args):
-        super(DASHStream, self).__init__(session)
+        super().__init__(session)
         self.mpd = mpd
         self.video_representation = video_representation
         self.audio_representation = audio_representation
@@ -261,4 +261,7 @@ class DASHStream(Stream):
             return audio
 
     def to_url(self):
+        return self.mpd.url
+
+    def to_manifest_url(self):
         return self.mpd.url

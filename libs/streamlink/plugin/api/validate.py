@@ -21,7 +21,7 @@ from functools import singledispatch
 from urllib.parse import urlparse
 from xml.etree import ElementTree as ET
 
-from ...exceptions import PluginError
+from streamlink.exceptions import PluginError
 
 __all__ = [
     "any", "all", "filter", "get", "getattr", "hasattr", "length", "optional",
@@ -51,13 +51,13 @@ def _is_re_match(value):
 class any(tuple):
     """At least one of the schemas must be valid."""
     def __new__(cls, *args):
-        return super(any, cls).__new__(cls, args)
+        return super().__new__(cls, args)
 
 
 class all(tuple):
     """All schemas must be valid."""
     def __new__(cls, *args):
-        return super(all, cls).__new__(cls, args)
+        return super().__new__(cls, args)
 
 
 class SchemaContainer(object):

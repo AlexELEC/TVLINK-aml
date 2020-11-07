@@ -1,16 +1,15 @@
 import logging
-from operator import itemgetter
 import os.path
-from shutil import which
 import subprocess
 import tempfile
 import time
+from operator import itemgetter
+from shutil import which
 
-from streamlink.stream import Stream
-from streamlink.stream.wrappers import StreamIOThreadWrapper
 from streamlink.compat import devnull
 from streamlink.exceptions import StreamError
-
+from streamlink.stream.stream import Stream
+from streamlink.stream.wrappers import StreamIOThreadWrapper
 
 log = logging.getLogger(__name__)
 
@@ -19,7 +18,7 @@ class StreamProcessIO(StreamIOThreadWrapper):
     def __init__(self, session, process, fd, **kwargs):
         self.process = process
 
-        super(StreamProcessIO, self).__init__(session, fd, **kwargs)
+        super().__init__(session, fd, **kwargs)
 
     def close(self):
         try:
@@ -27,7 +26,7 @@ class StreamProcessIO(StreamIOThreadWrapper):
         except Exception:
             pass
         finally:
-            super(StreamProcessIO, self).close()
+            super().close()
 
 
 class StreamProcess(Stream):
@@ -39,7 +38,7 @@ class StreamProcess(Stream):
         :param args: positional arguments
         :param timeout: timeout for process
         """
-        super(StreamProcess, self).__init__(session)
+        super().__init__(session)
 
         self.parameters = params or {}
         self.arguments = args or []

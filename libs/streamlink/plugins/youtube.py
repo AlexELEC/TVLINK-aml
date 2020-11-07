@@ -3,9 +3,9 @@ import re
 from urllib.parse import parse_qsl, urlparse, urlunparse
 
 from streamlink.plugin import Plugin, PluginError
-from streamlink.plugin.api import validate, useragents
+from streamlink.plugin.api import useragents, validate
 from streamlink.plugin.api.utils import itertags, parse_query
-from streamlink.stream import HTTPStream, HLSStream
+from streamlink.stream import HLSStream, HTTPStream
 from streamlink.stream.ffmpegmux import MuxedStream
 from streamlink.utils import parse_json, search_dict
 
@@ -123,7 +123,7 @@ class YouTube(Plugin):
     }
 
     def __init__(self, url):
-        super(YouTube, self).__init__(url)
+        super().__init__(url)
         parsed = urlparse(self.url)
         if parsed.netloc == 'gaming.youtube.com':
             self.url = urlunparse(parsed._replace(netloc='www.youtube.com'))
