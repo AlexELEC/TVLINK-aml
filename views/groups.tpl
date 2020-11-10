@@ -106,6 +106,17 @@
 
   </div>
 
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-bottom">
+    <div class="container justify-content-center"> <button class="navbar-toggler navbar-toggler-right border-0" type="button" data-toggle="collapse" data-target="#navbar_bottom">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a href="/sort_groups" id="sortGRP" style="font-size:20px;color:white;font-weight:bold;">Sort groups</a>
+    </div>
+  </nav>
+
 </body>
 
 </html>
