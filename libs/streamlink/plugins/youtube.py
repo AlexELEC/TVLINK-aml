@@ -249,7 +249,7 @@ class YouTube(Plugin):
                             log.debug("Video ID from videoRenderer (live)")
                             return x["videoId"]
 
-        if "/embed/live_stream" in url:
+        if urlparse(url).path.endswith(("/embed/live_stream", "/live")):
             for link in itertags(res.text, "link"):
                 if link.attributes.get("rel") == "canonical":
                     canon_link = link.attributes.get("href")
@@ -336,10 +336,10 @@ class YouTube(Plugin):
         if hls_manifest:
             try:
                 hls_streams = HLSStream.parse_variant_playlist(
-                    self.session, hls_manifest, namekey="pixels"
+                    self.session, hls_manifest, name_key="pixels"
                 )
                 streams.update(hls_streams)
-            except IOError as err:
+            except OSError as err:
                 log.warning(f"Failed to extract HLS streams: {err}")
 
         if not streams and protected:

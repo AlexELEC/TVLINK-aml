@@ -47,6 +47,14 @@
           <a href="http://{{HOST}}/tvhlist">http://{{HOST}}/tvhlist</a>
         </td>
       </tr>
+      <tr>
+        <td>
+          XMLTV EPG
+        </td>
+        <td>
+          <a href="http://{{HOST}}/xmltv">http://{{HOST}}/xmltv</a>
+        </td>
+      </tr>
     </table>
     <p>&nbsp;</p>
     Copyright © 2020 all rights reserved to <a href="https://alexelec.tv">Alex@ELEC</a>

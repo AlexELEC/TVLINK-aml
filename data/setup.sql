@@ -1,6 +1,20 @@
 PRAGMA foreign_keys = off;
 BEGIN TRANSACTION;
 
+-- Table: epg_groups
+DROP TABLE IF EXISTS epg_groups;
+CREATE TABLE epg_groups (grpName BLOB, enabled BOOLEAN DEFAULT (0));
+INSERT INTO epg_groups (grpName, enabled) VALUES ('Static', 0);
+INSERT INTO epg_groups (grpName, enabled) VALUES ('User', 0);
+
+-- Table: epg_sources
+DROP TABLE IF EXISTS epg_sources;
+CREATE TABLE epg_sources (srcName BLOB UNIQUE, enabled BOOLEAN DEFAULT (0), grpName BLOB, prio INT DEFAULT (10) NOT NULL, xmlDate BLOB, updDate BLOB, srcUrl BLOB, noDate BLOB, links INT DEFAULT (0) NOT NULL);
+INSERT INTO epg_sources (srcName, enabled, grpName, prio, xmlDate, updDate, srcUrl, noDate, links) VALUES ('IptvxONE', 0, 'Static', 1, '', '', 'https://epg.iptvx.one/epg.xml.gz', '', 0);
+INSERT INTO epg_sources (srcName, enabled, grpName, prio, xmlDate, updDate, srcUrl, noDate, links) VALUES ('IptvxTV', 0, 'Static', 2, '', '', 'http://epg.iptvx.tv/xmltv.xml.gz', '', 0);
+INSERT INTO epg_sources (srcName, enabled, grpName, prio, xmlDate, updDate, srcUrl, noDate, links) VALUES ('EdemTV', 0, 'Static', 3, '', '', 'http://epg.it999.ru/edem.xml.gz', '', 0);
+INSERT INTO epg_sources (srcName, enabled, grpName, prio, xmlDate, updDate, srcUrl, noDate, links) VALUES ('EpgTODAY', 0, 'Static', 4, '', '', 'http://epg.today/guide/free/FreeRU.xml.gz', '', 0);
+
 -- Table: input_groups
 DROP TABLE IF EXISTS input_groups;
 CREATE TABLE input_groups (grpName BLOB, enabled BOOLEAN DEFAULT (0));
@@ -17,10 +31,8 @@ INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, upd
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Zabava', 0, 'Sites', 1, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('IPnet', 0, 'Sites', 3, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Telehub', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
-INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('VkluchiTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('TvFresh', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('StandartTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
-INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('VseTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Peers', 0, 'Sites', 5, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('Voka', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
 INSERT INTO input_sources (srcName, enabled, grpName, prio, prioMode, addCh, updPeriod, updDate, links, srcUrl) VALUES ('AdultTV', 0, 'Sites', 10, 0, 0, 5, NULL, 0, NULL);
@@ -54,6 +66,11 @@ INSERT INTO settings (name, value) VALUES ('hls_playlist_reload_time', NULL);
 INSERT INTO settings (name, value) VALUES ('hls_stream_data', NULL);
 INSERT INTO settings (name, value) VALUES ('lic_key', NULL);
 INSERT INTO settings (name, value) VALUES ('src_proxy', NULL);
+INSERT INTO settings (name, value) VALUES ('chunk_size_ts', NULL);
+INSERT INTO settings (name, value) VALUES ('chunk_size_hls', NULL);
+INSERT INTO settings (name, value) VALUES ('epg_sort', NULL);
+INSERT INTO settings (name, value) VALUES ('epg_enabled', NULL);
+INSERT INTO settings (name, value) VALUES ('epg_period', NULL);
 
 COMMIT TRANSACTION;
 PRAGMA foreign_keys = on;

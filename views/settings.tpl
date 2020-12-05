@@ -271,6 +271,53 @@
   </form>
 
   <p>&nbsp;</p>
+  <h4><b>EPG settings:</b></h4>
+  <p>&nbsp;</p>
+
+  <div style="overflow:hidden;_zoom:1">
+
+    <table class="table" border="2" style="float:left;width:49%;display:block" >
+
+      {{!tbl_head}}
+
+      <!-- EPG update -->
+      <tr>
+        <td>
+          <label class="form-control">Auto update EPG</label>
+        </td>
+        <td><label class="switch">
+          <input id="epg_enabled" type="checkbox" onClick="server.set_epg_enable()" {{'checked="checked"' if not epg_enabled == 'false' else ""}} >
+          <span class="slider round"></span></label>
+        </td>
+      </tr>
+
+    </table>
+
+    <table class="table" border="2" style="float:right;width:49%;display:block" >
+
+      {{!tbl_head}}
+      % epg_period_values = [3,5,8,10,12,24,36,48,72,96,120,168]
+
+      <!-- EPG period -->
+      <tr>
+        <td >
+          <label class="form-control">Update period EPG (hours)</label>
+        </td>
+        <td>
+          <select id="epg_period" class="form-control" onchange="server.setting_options('epg_period')" >
+            % for tpr in epg_period_values:
+            <option {{'selected' if tpr == int(epg_period) else ""}} >{{tpr}}</option>
+            % end
+          </select>
+        </td>
+      </tr>
+
+    </table>
+
+  </div>
+
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
 
   <form class="form-inline">
     <label class="form-control"><b>License key:</b></label>

@@ -441,9 +441,6 @@ class HLSStream(HTTPStream):
                          name, pixels, bitrate.
         """
         locale = session_.localization
-        # Backwards compatibility with "namekey" and "nameprefix" params.
-        name_key = request_params.pop("namekey", name_key)
-        name_prefix = request_params.pop("nameprefix", name_prefix)
         audio_select = session_.options.get("hls-audio-select") or []
 
         res = session_.http.get(url, exception=IOError, **request_params)
@@ -451,7 +448,7 @@ class HLSStream(HTTPStream):
         try:
             parser = cls._get_variant_playlist(res)
         except ValueError as err:
-            raise IOError("Failed to parse playlist: {0}".format(err))
+            raise OSError("Failed to parse playlist: {0}".format(err))
 
         streams = OrderedDict()
         for playlist in filter(lambda p: not p.is_iframe, parser.playlists):
@@ -532,9 +529,9 @@ class HLSStream(HTTPStream):
                 except Exception:
                     continue
 
-            #external_audio = preferred_audio or default_audio or fallback_audio
+            external_audio = preferred_audio or default_audio or fallback_audio
             #print (preferred_audio, default_audio, fallback_audio)
-            external_audio = False
+            #external_audio = False
 
             if external_audio and FFMPEGMuxer.is_usable(session_):
                 external_audio_msg = ", ".join([
