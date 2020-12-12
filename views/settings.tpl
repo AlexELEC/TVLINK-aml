@@ -121,7 +121,7 @@
     <table class="table" border="2" style="float:left;width:49%;display:block" >
 
       {{!tbl_head}}
-      % buf_values = [3,5,8,10,15,20,25,30,35,40,45,50]
+      % buf_values = [3,5,8,10,15,20,25,30,35,40,45,50,80,100,150,200]
       % chunk_values = [4096, 8192, 16384, 24576, 32768]
 
       <!-- TS Buffer -->
