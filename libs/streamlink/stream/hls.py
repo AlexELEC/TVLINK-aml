@@ -2,6 +2,7 @@ import logging
 import re
 import struct
 from collections import OrderedDict, defaultdict, namedtuple
+from threading import Event
 from urllib.parse import urlparse
 
 from Crypto.Cipher import AES
@@ -40,7 +41,6 @@ class HLSStreamWriter(SegmentedStreamWriter):
         kwargs["retries"] = options.get("hls-segment-attempts")
         kwargs["threads"] = options.get("hls-segment-threads")
         kwargs["timeout"] = options.get("hls-segment-timeout")
-        kwargs["ignore_names"] = options.get("hls-segment-ignore-names")
         SegmentedStreamWriter.__init__(self, reader, *args, **kwargs)
 
         self.byterange_offsets = defaultdict(int)
@@ -50,13 +50,11 @@ class HLSStreamWriter(SegmentedStreamWriter):
         self.stream_data = options.get("hls-segment-stream-data")
         self.chunk_size = options.get("chunk-size-hls")
 
-        if self.ignore_names:
-            # creates a regex from a list of segment names,
-            # this will be used to ignore segments.
-            self.ignore_names = list(set(self.ignore_names))
-            self.ignore_names = "|".join(list(map(re.escape, self.ignore_names)))
-            self.ignore_names_re = re.compile(r"(?:{blacklist})\.ts".format(
-                blacklist=self.ignore_names), re.IGNORECASE)
+        self.ignore_names = False
+        ignore_names = {*options.get("hls-segment-ignore-names")}
+        if ignore_names:
+            segments = "|".join(map(re.escape, ignore_names))
+            self.ignore_names = re.compile(rf"(?:{segments})\.ts", re.IGNORECASE)
 
     def create_decryptor(self, key, sequence):
         if key.method != "AES-128":
@@ -117,10 +115,6 @@ class HLSStreamWriter(SegmentedStreamWriter):
 
         try:
             request_params = self.create_request_params(sequence)
-            # skip ignored segment names
-            if self.ignore_names and self.ignore_names_re.search(sequence.segment.uri):
-                log.debug(f"Skipping segment {sequence.num}")
-                return
 
             return self.session.http.get(sequence.segment.uri,
                                          stream=(self.stream_data
@@ -134,7 +128,25 @@ class HLSStreamWriter(SegmentedStreamWriter):
             self.close()
             return
 
-    def write(self, sequence, res):
+    def should_filter_sequence(self, sequence):
+        return self.ignore_names and self.ignore_names.search(sequence.segment.uri) is not None
+
+    def write(self, sequence, *args, **kwargs):
+        if not self.should_filter_sequence(sequence):
+            try:
+                return self._write(sequence, *args, **kwargs)
+            finally:
+                # unblock reader thread after writing data to the buffer
+                if not self.reader.filter_event.is_set():
+                    log.info("Resuming stream output")
+                    self.reader.filter_event.set()
+
+        # block reader thread if filtering out segments
+        elif self.reader.filter_event.is_set():
+            log.info("Filtering out segments and pausing stream output")
+            self.reader.filter_event.clear()
+
+    def _write(self, sequence, res):
         if sequence.segment.key and sequence.segment.key.method != "NONE":
             try:
                 decryptor = self.create_decryptor(sequence.segment.key,
@@ -339,11 +351,33 @@ class HLSStreamReader(SegmentedStreamReader):
         self.request_params = dict(stream.args)
         self.timeout = stream.session.options.get("hls-timeout")
 
+        self.filter_event = Event()
+        self.filter_event.set()
+
         # These params are reserved for internal use
         self.request_params.pop("exception", None)
         self.request_params.pop("stream", None)
         self.request_params.pop("timeout", None)
         self.request_params.pop("url", None)
+
+    def read(self, size):
+        while True:
+            try:
+                return super().read(size)
+            except OSError:
+                # wait indefinitely until filtering ends
+                self.filter_event.wait()
+                if self.buffer.closed:
+                    return b""
+                # if data is available, try reading again
+                if self.buffer.length > 0:
+                    continue
+                # raise if not filtering and no data available
+                raise
+
+    def close(self):
+        super().close()
+        self.filter_event.set()
 
 
 class MuxedHLSStream(MuxedStream):

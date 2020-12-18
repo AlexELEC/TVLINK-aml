@@ -101,6 +101,13 @@
   </div>
 
   <p>&nbsp;</p>
+  <form class="form-inline" >
+    <label class="form-control"><b>Check internet IP:</b></label>
+    <input id="check_ip" size="50%" class="form-control" value="{{check_net_ip}}" onchange="server.set_checkip()">
+  </form>
+  <p>&nbsp;</p>
+
+  <p>&nbsp;</p>
   <h4><b>Streamer settings:</b></h4>
   <p>&nbsp;</p>
 
