@@ -125,7 +125,6 @@ class HLSStreamWriter(SegmentedStreamWriter):
                                          **request_params)
         except StreamError as err:
             log.error(f"Failed to open segment {sequence.num}: {err}")
-            self.close()
             return
 
     def should_filter_sequence(self, sequence):
@@ -316,6 +315,7 @@ class HLSStreamWorker(SegmentedStreamWorker):
         total_duration = 0
         while not self.closed:
             for sequence in filter(self.valid_sequence, self.playlist_sequences):
+                #print ('Adding segment to queue:', sequence.segment.uri)
                 log.debug(f"Adding segment {sequence.num} to queue")
                 yield sequence
                 total_duration += sequence.segment.duration
@@ -332,6 +332,7 @@ class HLSStreamWorker(SegmentedStreamWorker):
 
             if self.wait(self.playlist_reload_time):
                 try:
+                    #print ('Reload playlist Wait:', self.playlist_reload_time)
                     self.reload_playlist()
                 except StreamError as err:
                     log.warning(f"Failed to reload playlist: {err}")
@@ -415,6 +416,7 @@ class HLSStream(HTTPStream):
     """
 
     __shortname__ = "hls"
+    __reader__ = HLSStreamReader
 
     def __init__(self, session_, url, url_master=None, force_restart=False, start_offset=0, duration=None, **args):
         HTTPStream.__init__(self, session_, url, **args)
@@ -443,7 +445,7 @@ class HLSStream(HTTPStream):
         return self.url_master
 
     def open(self):
-        reader = HLSStreamReader(self)
+        reader = self.__reader__(self)
         reader.open()
         self.reader = reader
 

@@ -126,6 +126,7 @@ class SegmentedStreamWriter(Thread):
                         'vod/ban',
                         'vod/deny',
                         '/empty.ts',
+                        '/drop.ts',
                         '/disabled/',
                         'video/money',
                         'errors/banned',
@@ -185,7 +186,7 @@ class SegmentedStreamWriter(Thread):
             try:
                 segment, future = self.futures.get(block=True, timeout=0.5)
                 try:
-                    #print ('segment:', segment.segment.uri)
+                    #print ('\nReceived segment: {}'.format(segment.segment.uri) )
                     for ban in self.BAN_LIST:
                         if ban in segment.segment.uri:
                             log.error("BANNED: provider blocked stream [{}]".format(segment.segment.uri) )
