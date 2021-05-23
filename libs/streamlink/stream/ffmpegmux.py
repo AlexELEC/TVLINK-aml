@@ -20,6 +20,7 @@ class MuxedStream(Stream):
         self.substreams = substreams
         self.subtitles = options.pop("subtitles", {})
         self.options = options
+        self.muxer = None
 
     def open(self):
         fds = []
@@ -44,7 +45,12 @@ class MuxedStream(Stream):
         self.options["metadata"] = metadata
         self.options["maps"] = maps
 
-        return FFMPEGMuxer(self.session, *fds, **self.options).open()
+        self.muxer = FFMPEGMuxer(self.session, *fds, **self.options)
+        return self.muxer.open()
+
+    def close(self):
+        self.muxer.close()
+        self.muxer = None
 
     @classmethod
     def is_usable(cls, session):
