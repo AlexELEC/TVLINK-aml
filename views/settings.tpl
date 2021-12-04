@@ -71,6 +71,30 @@
           <input id="check_ip" class="form-control" type="text" value="{{check_net_ip}}" onchange="server.set_checkip()" >
         </td>
       </tr>
+      <!-- Check internet timeout -->
+      <tr>
+        <td >
+          <label class="form-control">Check internet max time</label>
+        </td>
+        <td>
+          <select id="check_time" class="form-control" onchange="server.setting_options('check_time')" >
+            % for chtime in ['10sec','30sec','60sec','10min','30min','60min','10hr','30hr','60hr']:
+            <option {{'selected' if chtime == check_time else ""}} >{{chtime}}</option>
+            % end
+          </select>
+        </td>
+      </tr>
+      <!-- Auth Login -->
+      % if auth_webui == 'true':
+      <tr>
+        <td>
+          <label class="form-control">Login (webUI)</label>
+        </td>
+        <td>
+          <input id="webui_user" class="form-control" type="text" value="{{webui_user}}" onchange="server.set_webui_user()" >
+        </td>
+      </tr>
+      % end
 
     </table>
 
@@ -98,6 +122,16 @@
           <span class="slider round"></span></label>
         </td>
       </tr>
+      <!-- Create static playlist -->
+      <tr>
+        <td>
+          <label class="form-control">Create static playlist</label>
+        </td>
+        <td><label class="switch">
+          <input id="static_playlist" type="checkbox" onClick="server.static_playlist()" {{'checked="checked"' if static_playlist == 'true' else ""}} >
+          <span class="slider round"></span></label>
+        </td>
+      </tr>
       <!-- Remove channels -->
       <tr>
         <td>
@@ -108,19 +142,27 @@
           <span class="slider round"></span></label>
         </td>
       </tr>
-      <!-- Check internet timeout -->
+      <!-- Authentication -->
       <tr>
-        <td >
-          <label class="form-control">Check internet max time</label>
-        </td>
         <td>
-          <select id="check_time" class="form-control" onchange="server.setting_options('check_time')" >
-            % for chtime in ['10sec','30sec','60sec','10min','30min','60min','10hr','30hr','60hr']:
-            <option {{'selected' if chtime == check_time else ""}} >{{chtime}}</option>
-            % end
-          </select>
+          <label class="form-control">Authentication webUI</label>
+        </td>
+        <td><label class="switch">
+          <input id="auth_webui" type="checkbox" onClick="server.webui_auth()" {{'checked="checked"' if auth_webui == 'true' else ""}} >
+          <span class="slider round"></span></label>
         </td>
       </tr>
+      <!-- Auth Password -->
+      % if auth_webui == 'true':
+      <tr>
+        <td>
+          <label class="form-control">Password (webUI)</label>
+        </td>
+        <td>
+          <input id="webui_pass" class="form-control" type="password" value="{{webui_pass}}" onchange="server.set_webui_pass()" >
+        </td>
+      </tr>
+      % end
 
     </table>
 
